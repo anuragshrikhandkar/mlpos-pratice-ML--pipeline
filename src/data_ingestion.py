@@ -27,26 +27,18 @@ logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
 
-# def load_params(params_path:str)->dict:
-#     """load params from yaml file"""
-
-#     try:
-#         with open(params_path,'r') as file:
-#             params=yaml.safe_load(file)
-#         logger.debug('File not found:%s',params_path)
-#         return params 
-        
-        
-#     except Exception as e:
-#         logger.error("parameters retrived from %",params_path)
-#         raise
-#     except yaml.YAMLError as e :
-#         raise
-#     except Exception as e:
-#         logger.error("unexpectd error:%s",e)
-#         raise
-
-
+def load_params(params_path):
+    try:
+        with open(params_path, 'r') as file:
+            params = yaml.safe_load(file)
+            if params is None:
+                raise ValueError("params.yaml is empty!")
+            return params
+    except FileNotFoundError:
+        print(f"Error: File '{params_path}' not found.")
+    except yaml.YAMLError:
+        print(f"Error: Failed to parse '{params_path}'. Check YAML syntax.")
+    return {}  # Return an empty dictionary instead of None
 
 def load_data(data_url:str)->pd.DataFrame:
     """load data from csv file"""
@@ -100,9 +92,9 @@ def save_data(train_data:pd.DataFrame,test_data:pd.DataFrame,data_path:str)->Non
 
 def main():
     try:
-        #params=load_params(params_path='params_yaml') 
-        #test_size=params['data_ingestion']['test_size']
-        test_size=0.2 
+        params=load_params(params_path='params.yaml') 
+        test_size=params['data_ingestion']['test_size']
+        #test_size=0.2 
         data_path='https://raw.githubusercontent.com/anuragshrikhandkar/DATASETS-MLPOS-PRATICE-/refs/heads/main/spam.csv'
         df=load_data(data_url=data_path)
         final_df = preprocessing_data(df)

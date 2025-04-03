@@ -23,6 +23,7 @@ file_handler.setLevel('DEBUG')
 formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 console_handler.setFormatter(formatter)
 file_handler.setFormatter(formatter)
+
 logger.addHandler(console_handler)
 logger.addHandler(file_handler)
 
@@ -76,6 +77,15 @@ def evaulate_model(clf,X_test:np.ndarray,y_test:np.ndarray)->dict:
    except Exception as e:
       logger.error("error during model evaluation :%s",e)
       raise
+# def evaluate_model():
+#     print("Evaluating model...")
+#     metrics = {"accuracy": 0.85}  # Example metric
+#     with open("reports/metrics.json", "w") as f:
+#         json.dump(metrics, f)
+#     print("Evaluation complete.")
+
+# if __name__ == "__main__":
+#     evaluate_model()
 
 
 def save_metrics(metrics:dict,file_path:str)->None:
